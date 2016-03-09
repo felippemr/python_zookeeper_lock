@@ -1,17 +1,9 @@
 import json
 import logging
-# from settings import DATABASE_QUEUE
+from settings import DATABASE_QUEUE
 from pulsar import as_coroutine
 from pulsar.apps import rpc, wsgi
 from pulsar.utils.httpurl import JSON_CONTENT_TYPES
-from kazoo.client import KazooClient
-from kazoo.recipe.queue import LockingQueue
-
-ZK_CLIENT = KazooClient()
-ZK_CLIENT.start()
-
-
-DATABASE_QUEUE = LockingQueue(ZK_CLIENT, '/database_queue')
 
 logging.basicConfig()
 LOG = logging.getLogger("QueueService")
