@@ -24,6 +24,7 @@ def work():
                 LOG.info("LockTimeout on {}".format(message['name']))
             except Exception as e:
                 LOG.warn("Exception: {}".format(e))
+    LOG.info("Worker stoped!")
 
 
 def parse_message(message):
@@ -31,6 +32,7 @@ def parse_message(message):
 
 
 def create_database(message):
+    LOG.info("Creating Database...")
     sleep(30)
     LOG.info("Database {} succesfully created!".format(message['name']))
 
