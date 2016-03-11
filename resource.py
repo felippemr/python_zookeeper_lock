@@ -1,10 +1,10 @@
 from contextlib import contextmanager
-from settings import ZK_CLIENT
+import settings
 
 
 class Resource(object):
     def __init__(self, name,):
-        self._zookeeper_client = ZK_CLIENT
+        self._zookeeper_client = settings.ZK_CLIENT
         self._name = name
 
     @contextmanager

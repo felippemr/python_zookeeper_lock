@@ -1,10 +1,10 @@
 import json
 import logging
-from settings import DATABASE_QUEUE
+import settings
 from nameko.rpc import rpc
 
 logging.basicConfig()
-LOG = logging.getLogger("QueueService")
+LOG = logging.getLogger("DatabaseQueueService")
 LOG.setLevel(logging.DEBUG)
 
 
@@ -18,7 +18,7 @@ class DatabaseService(object):
         ), 'utf-8')
         LOG.debug("Args Converted")
 
-        DATABASE_QUEUE.put(call_args)
+        settings.DATABASE_QUEUE.put(call_args)
         LOG.debug("Queue updated")
 
-        return "Creat request sent to queue".format(name)
+        return "Create request sent to queue"
