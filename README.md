@@ -21,5 +21,4 @@ Testing
     $ zkServer start
     $ rabbitmq-server
     $ nameko run start_queues
-    $ nameko shell
-    >>> n.rpc.database_service.create_database(engine="mysql", name="teste999991", cpu="1", mem="2048")
+    $ python database_service_worker.py (you can start as many workers as you want)
