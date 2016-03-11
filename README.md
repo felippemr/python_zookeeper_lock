@@ -5,11 +5,11 @@ Requirements
 
 * Zookeeper >= 3.4
 * Python >= 3.4
+* AMPQ >= 3.5.4
 
 Setting up local environment
 =============================
 
-    $ zkServer start
     $ mkvirtualenv python_zk_lab
     $ workon python_zk_lab
     $ make pip
@@ -18,13 +18,8 @@ Setting up local environment
 Testing
 =======
 
-    $ python start_queues.py --bind 127.0.0.1:9001
-    $ python
-    >>> from pulsar.apps.rpc.jsonrpc import JsonProxy
-    >>> import asyncio
-    >>> p = JsonProxy('http://127.0.0.1:9001')
-    >>> a = p.database_manager.create_database('mysql', 'test', '1', '2048')
-    >>> task = asyncio.async(a)
-    >>> task.loop = asyncio.get_event_loop()
-    >>> loop = asyncio.get_event_loop()
-    >>> loop.run_until_complete(task)
+    $ zkServer start
+    $ rabbitmq-server
+    $ nameko run start_queues
+    $ nameko shell
+    >>> n.rpc.database_service.create_database(engine="mysql", name="teste999991", cpu="1", mem="2048")
