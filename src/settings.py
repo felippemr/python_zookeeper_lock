@@ -1,10 +1,14 @@
 from contextlib import contextmanager
-import settings
+from kazoo.client import KazooClient
+from kazoo.recipe.queue import LockingQueue
+
+ZK_CLIENT = KazooClient()
+ZK_CLIENT.start()
 
 
 class Resource(object):
     def __init__(self, name,):
-        self._zookeeper_client = settings.ZK_CLIENT
+        self._zookeeper_client = ZK_CLIENT
         self._name = name
 
     @contextmanager
@@ -16,3 +20,8 @@ class Resource(object):
             yield
         finally:
             lock.release()
+
+
+DATABASE_RESOURCE_MANAGER = Resource('database')
+CREATE_DATABASE_QUEUE = LockingQueue(ZK_CLIENT, '/create_database_queue')
+DESTROY_DATABASE_QUEUE = LockingQueue(ZK_CLIENT, '/destroy_database_queue')
