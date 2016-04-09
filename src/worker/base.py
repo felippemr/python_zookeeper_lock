@@ -1,16 +1,11 @@
 import json
-import logging
 from kazoo import exceptions
-
-logging.basicConfig()
-LOG = logging.getLogger("BaseWorker")
-LOG.setLevel(logging.INFO)
 
 KEEP_WORKING = True
 
 
-def base_worker(queue, function, lock_manager):
-    LOG.info("Worker Started!")
+def base_worker(logger, queue, function, lock_manager):
+    logger.info("Worker Started!")
     while KEEP_WORKING:
         message = parse_message(queue.get())
         if message['name'] is not None:
@@ -19,10 +14,10 @@ def base_worker(queue, function, lock_manager):
                     if queue.consume():
                         function(message)
             except exceptions.LockTimeout:
-                LOG.info("LockTimeout on {}".format(message['name']))
+                logger.info("LockTimeout on {}".format(message['name']))
             except Exception as e:
-                LOG.warn("Exception: {}".format(e))
-    LOG.info("Worker stoped!")
+                logger.warn("Exception: {}".format(e))
+    logger.info("Worker stoped!")
 
 
 def parse_message(message):

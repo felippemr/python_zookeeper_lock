@@ -1,12 +1,7 @@
 import logging
-from time import sleep
 import settings
+from time import sleep
 from base import base_worker
-
-
-logging.basicConfig()
-LOG = logging.getLogger("CreateDatabaseServiceWorker")
-LOG.setLevel(logging.DEBUG)
 
 
 def create_database(message):
@@ -16,12 +11,19 @@ def create_database(message):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(
+        filename='logs/create_database_worker.txt',
+        level=logging.INFO
+    )
+    LOG = logging.getLogger("CreateDatabaseServiceWorker")
+
     try:
         base_worker(
+            logger=LOG,
             queue=settings.CREATE_DATABASE_QUEUE,
             function=create_database,
             lock_manager=settings.DATABASE_RESOURCE_MANAGER
         )
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, SystemExit):
         LOG.info("Shuting down worker...")
         KEEP_WORKING = False
