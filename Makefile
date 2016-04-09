@@ -16,8 +16,8 @@ start_deps: ## Start project dependencies(Eg.: Zookeeper...)
 
 setup_logs: ## Create log structres
 	@mkdir -p logs
-	@touch logs/create_database_worker.txt
-	@touch logs/destroy_database_worker.txt
+	@touch logs/create_database_queue.txt
+	@touch logs/destroy_database_queue.txt
 	@touch logs/database_rpc_service.txt
 
 start_db_service: ## Start database service
