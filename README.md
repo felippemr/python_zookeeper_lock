@@ -6,6 +6,8 @@ Requirements
 * Zookeeper >= 3.4
 * Python >= 3.4
 * AMPQ >= 3.5.4
+* VirtualenvWrapper
+
 
 Setting up local environment
 =============================
