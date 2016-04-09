@@ -1,8 +1,13 @@
 import json
+import errno
 import logging
 import settings
+import eventlet
+from eventlet import backdoor
 from nameko.rpc import rpc
 from nameko.runners import ServiceRunner
+
+eventlet.monkey_patch(thread=False)
 
 logging.basicConfig(
     filename='logs/database_rpc_service.txt',
@@ -39,20 +44,33 @@ class DatabaseService(object):
 
         return "Destroy request sent to queue"
 
+
 def main():
     config = {
         '_log': LOG,
-        'AMQP_URI': 'amqp://guest:guest@localhost'
+        'AMQP_URI': 'amqp://guest:guest@127.0.0.1:5672'
     }
-    runner = ServiceRunner(config)
-    runner.add_service(DatabaseService)
+    service_runner = ServiceRunner(config)
+    service_runner.add_service(DatabaseService)
 
-    runner.start()
+    service_runner.start()
 
-    try:
-        runner.wait()
-    except (KeyboardInterrupt, SystemExit):
-        runner.kill()
+    runnlet = eventlet.spawn(service_runner.wait)
+
+    while True:
+        try:
+            runnlet.wait()
+        except OSError as exc:
+            if exc.errno == errno.EINTR:
+                continue
+            raise
+        except KeyboardInterrupt:
+            try:
+                service_runner.stop()
+            except KeyboardInterrupt:
+                service_runner.kill()
+        else:
+            break
 
 if __name__ == '__main__':
     main()
