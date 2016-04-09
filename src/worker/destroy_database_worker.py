@@ -1,29 +1,16 @@
-import logging
 from time import sleep
-from base import base_worker
-import settings
+from base import worker
 
 
-def destroy_database(message):
-    LOG.info("Destroying Database...")
-    sleep(10)
-    LOG.info("Database {} succesfully destroyed!".format(message['name']))
+def create_database(message, logger):
+    logger.info("Creating Database...")
+    sleep(30)
+    logger.info("Database {} succesfully created!".format(message['name']))
 
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        filename='logs/destroy_database_worker.txt',
-        level=logging.INFO
-    )
-    LOG = logging.getLogger("DestroyDatabaseServiceWorker")
 
-    try:
-        base_worker(
-            logger=LOG,
-            queue=settings.DESTROY_DATABASE_QUEUE,
-            function=destroy_database,
-            lock_manager=settings.DATABASE_RESOURCE_MANAGER
-        )
-    except (KeyboardInterrupt, SystemExit):
-        LOG.info("Shuting down worker...")
-        KEEP_WORKING = False
+    worker(
+        '/destroy_database_queue', create_database, 'database',
+        name='destroy_database_worker'
+    )
