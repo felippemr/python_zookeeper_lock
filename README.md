@@ -15,11 +15,9 @@ Setting up local environment
     $ make pip
 
 
-Testing
+Getting Started
 =======
 
-    $ zkServer start
-    $ rabbitmq-server
-    $ nameko run start_queues
+    $ make start_all
     $ nameko shell
-    >>> n.rpc.database_service.create_database(engine="mysql", name="teste999991", cpu="1", mem="2048")
+    >>> n.rpc.database_service.create_database(engine="mysql", name="lads0", cpu="1", mem="2048")
