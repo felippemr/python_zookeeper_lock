@@ -41,7 +41,6 @@ def _work(queue_name, function, resource_name, lock_timeout=10):
 
     resource_manager = Resource(resource_name, zookeeper_client)
 
-
     logger = multiprocessing.log_to_stderr()
     logger.setLevel(logging.INFO)
     logger.info("Worker Started!")
